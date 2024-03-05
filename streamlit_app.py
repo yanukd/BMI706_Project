@@ -115,37 +115,39 @@ num_color = alt.Color(field="Cases", type="quantitative", scale=num_scale)
 std_map = chart_base.mark_geoshape().encode(
     color=num_color,
     tooltip=['Cases:Q', 'Geography:N']
+).transform_filter(
+    selector
+    ).properties(
+    title=f'STD Cases in U.S. {year}'
 )
 
 map_left = background + std_map
 st.altair_chart(map_left, use_container_width=True)
 
-# chart = alt.Chart(subset).mark_rect().encode(
-#     x=alt.X("Age:O", sort=ages),
-#     y=alt.Y("Country:N"),
-#     color=alt.Color("Rate:Q", scale=alt.Scale(type='log', domain=scale_domain, clamp=True)),
-#     tooltip=["Country", "Age", "Rate"]
-# ).properties(
-#     title=f"{cancer} mortality rates for {'males' if sex == 'M' else 'females'} in {year}",
-# )
-#
-# # population bar chart
-# population = subset.groupby('Country')['Pop'].sum().reset_index()
-# chart2 = alt.Chart(population).mark_bar().encode(
-#     x=alt.X("Pop:Q", title="Sum of popukation size"),
-#     y=alt.Y("Country:N", sort='-x'),
-#     tooltip=["Country", "Pop"]
-# )
-# ### P2.5 ###
-#
-# st.altair_chart(chart, use_container_width=True)
-#
-# st.altair_chart(chart2, use_container_width=True)
-#
-# countries_in_subset = subset["Country"].unique()
-# if len(countries_in_subset) != len(countries):
-#     if len(countries_in_subset) == 0:
-#         st.write("No data avaiable for given subset.")
-#     else:
-#         missing = set(countries) - set(countries_in_subset)
-#         st.write("No data available for " + ", ".join(missing) + ".")
+# sdh map
+sdh_data = subset_std.groupby(['Geography', 'Year', 'FIPS'])['Numerator'].sum().reset_index()
+
+chart_base_sdh = alt.Chart(source
+    ).properties(
+        width=width,
+        height=height
+    ).project(project
+    ).add_selection(selector
+    ).transform_lookup(
+        lookup="id",
+        from_=alt.LookupData(std_data, "FIPS", ['Geography','Numerator']),
+    )
+
+num_scale = alt.Scale(domain=[sdh_data['Numerator'].min(), sdh_data['Numerator'].max()], scheme='oranges')
+num_color = alt.Color(field="Numerator", type="quantitative", scale=num_scale)
+sdh_map = chart_base_sdh.mark_geoshape().encode(
+    color=num_color,
+    tooltip=['Numerator:Q', 'Geography:N']
+).transform_filter(
+    selector
+    ).properties(
+    title=f'Social Determinants Numerator in U.S. {year}'
+)
+
+map_right = background + sdh_map
+st.altair_chart(map_right, use_container_width=True)
