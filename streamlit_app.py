@@ -135,7 +135,7 @@ chart_base_sdh = alt.Chart(source
     ).add_selection(selector
     ).transform_lookup(
         lookup="id",
-        from_=alt.LookupData(std_data, "FIPS", ['Geography','Numerator']),
+        from_=alt.LookupData(sdh_data, "FIPS", ['Geography','Numerator']),
     )
 
 num_scale = alt.Scale(domain=[sdh_data['Numerator'].min(), sdh_data['Numerator'].max()], scheme='oranges')
