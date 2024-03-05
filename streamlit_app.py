@@ -111,7 +111,7 @@ chart_base = alt.Chart(source
 # Map values
 
 num_scale = alt.Scale(domain=[std_data['Cases'].min(), std_data['Cases'].max()], scheme='oranges')
-num_color = alt.Color(field="Cases", type="quantitative", scale=rate_scale)
+num_color = alt.Color(field="Cases", type="quantitative", scale=num_scale)
 std_map = chart_base.mark_geoshape().encode(
     color=num_color,
     tooltip=['Cases:Q', 'Geography:N']
