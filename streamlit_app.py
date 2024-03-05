@@ -79,7 +79,7 @@ std_data = subset_std.groupby(['Geography', 'Year', 'FIPS'])['Cases'].sum().rese
 
 width = 600
 height = 300
-project = 'albersUsa'
+project = 'equirectangular'
 
 # a gray map using as the visualization background
 
@@ -92,26 +92,26 @@ background = alt.Chart(source
     height=height
 ).project(project)
 
-# selector = alt.selection_single(
-#     # add your code here
-#     on='click',
-#     fields=['Country']
-# )
-
-chart_base = alt.Chart(source).properties(
-    width=width,
-    height=height
-).project(project
-          ).transform_lookup(
-    lookup="id",
-    from_=alt.LookupData(subset_std, 'FIPS', ['Geography','Cases']),
-).properties(
-    title='STD cases in U.S. {year}'
+selector = alt.selection_single(
+    # add your code here
+    on='click',
+    fields=['states']
 )
+
+chart_base = alt.Chart(source
+    ).properties(
+        width=width,
+        height=height
+    ).project(project
+    ).add_selection(selector
+    ).transform_lookup(
+        lookup="id",
+        from_=alt.LookupData(std_data, "FIPS", ['Geography','Cases']),
+    )
 # Map values
 
-num_scale = alt.Scale(domain=[subset_std['Cases'].min(), subset_std['Cases'].max()])
-num_color = alt.Color('Cases:Q', scale=num_scale)
+num_scale = alt.Scale(domain=[std_data['Cases'].min(), std_data['Cases'].max()], scheme='oranges')
+num_color = alt.Color(field="Cases", type="quantitative", scale=rate_scale)
 std_map = chart_base.mark_geoshape().encode(
     color=num_color,
     tooltip=['Cases:Q', 'Geography:N']
