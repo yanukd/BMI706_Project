@@ -23,14 +23,33 @@ def load_data():
     sdh_df['Year'] = pd.to_numeric(sdh_df['Year'], errors='coerce')
     std_df['Year'] = pd.to_numeric(std_df['Year'], errors='coerce')
 
+    std_df = std_df[std_df['Year'] > 2010]
+
+    #pivoted_df
+    pivoted_std_df = std_df.pivot(index=['FIPS', 'Geography', 'Year'], columns='Indicator', values=['Cases'])
+
+    # Rename the pivoted columns and reset index in a concise way
+    pivoted_std_df.columns = [f'{indicator}_{val}'.lower().replace(' ', '_') for val, indicator in pivoted_std_df.columns]
+    pivoted_std_df = pivoted_std_df.reset_index()
+
+    # Social Determinants of Health Table
+    pivoted_sdh_df = sdh_df.pivot(index=['FIPS', 'Geography', 'Year'], columns='Indicator', values=['Numerator'])
+
+    # Rename the pivoted columns and reset index in a concise way
+    pivoted_sdh_df.columns = [f'{indicator}_{val}'.lower().replace(' ', '_') for val, indicator in pivoted_sdh_df.columns]
+    pivoted_sdh_df = pivoted_sdh_df.reset_index()
+
+    pivoted_df = pd.merge(pivoted_std_df, pivoted_sdh_df, on=['FIPS', 'Geography', 'Year'], how='left')
+
+    #combined_df
     combined_df = pd.concat([std_df, sdh_df], ignore_index=True)
     combined_df = combined_df.fillna(0)
 
-    return combined_df
+    return combined_df, pivoted_df
 
 
 # load data
-df = load_data()
+df, pivoted_df = load_data()
 
 # title
 st.write("## STD Dashboard")
@@ -168,3 +187,27 @@ sdh_map = chart_base_sdh.mark_geoshape().encode(
 map_right = background + sdh_map
 st.altair_chart(map_right, use_container_width=True)
 
+#correlation matrix
+cor_df = pivoted_df.drop(['FIPS', 'Geography','Year'], axis = 1)
+corr_matrix = cor_df.corr()
+corr_matrix_long = corr_matrix.reset_index().melt('index')
+
+heatmap = alt.Chart(corr_matrix_long).mark_rect().encode(
+    x='index:O',
+    y='variable:O',
+    color=alt.Color('value:Q', scale=alt.Scale(domain=[-1, 1], scheme='redblue')),
+    tooltip=[
+        alt.Tooltip('index', title='Variable 1'),
+        alt.Tooltip('variable', title='Variable 2'),
+        alt.Tooltip('value', title='Correlation')
+    ]
+).properties(
+    title='Correlation Matrix Heatmap',
+    width=alt.Step(40),  # Controls the width of the heatmap cells
+    height=alt.Step(40)  # Controls the height of the heatmap cells
+).configure_axis(
+    labelFontSize=10
+)
+
+# Display the heatmap in Streamlit
+st.altair_chart(heatmap)
