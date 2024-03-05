@@ -151,7 +151,6 @@ chart_base_sdh = alt.Chart(source
         width=width,
         height=height
     ).project(project
-    ).add_selection(selector
     ).transform_lookup(
         lookup="id",
         from_=alt.LookupData(sdh_data, "FIPS", ['Geography','Numerator']),
@@ -171,10 +170,3 @@ sdh_map = chart_base_sdh.mark_geoshape().encode(
 map_right = background + sdh_map
 st.altair_chart(map_right, use_container_width=True)
 
-# countries_in_subset = subset["Country"].unique()
-# if len(countries_in_subset) != len(countries):
-#     if len(countries_in_subset) == 0:
-#         st.write("No data avaiable for given subset.")
-#     else:
-#         missing = set(countries) - set(countries_in_subset)
-#         st.write("No data available for " + ", ".join(missing) + ".")
