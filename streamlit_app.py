@@ -43,14 +43,11 @@ def load_data():
     return df
 
 
-# Uncomment the next line when finished
+# load data
 df = load_data()
 
-
-# ### P1.2 ###
-#
-#
-# st.write("## Age-specific cancer mortality rates")
+# title
+st.write("## STD Dashboard")
 #
 # ### P2.1 ###
 # # replace with st.slider
