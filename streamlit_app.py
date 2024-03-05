@@ -73,14 +73,14 @@ subset_sdh = subset[subset["Indicator"].isin(sdh)]
 
 # std map
 source = alt.topo_feature(data.us_10m.url, 'states')
-subset_std = subset_std.dropna(subset=['Cases'])
+std_data = subset_std.groupby('Geography', 'Year')['Cases'].sum().reset_index()
+std_data= subset_std.dropna(subset=['Cases'])
 
 width = 600
 height = 300
 project = 'albersUsa'
 
 # a gray map using as the visualization background
-# std_data = subset_std.groupby('Geography')['Numerator'].sum().reset_index()
 
 background = alt.Chart(source
                        ).mark_geoshape(
