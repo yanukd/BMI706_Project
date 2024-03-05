@@ -88,20 +88,19 @@ background = alt.Chart(source
     height=height
 ).project(project)
 
-selector = alt.selection_single(
-    # add your code here
-    on='click',
-    fields=['Country']
-)
+# selector = alt.selection_single(
+#     # add your code here
+#     on='click',
+#     fields=['Country']
+# )
 
 chart_base = alt.Chart(source).properties(
     width=width,
     height=height
 ).project(project
-          ).add_selection(selector
-                          ).transform_lookup(
+          ).transform_lookup(
     lookup="id",
-    from_=alt.LookupData(subset_std, 'FIPS', ['Geography','Numerators']),
+    from_=alt.LookupData(subset_std, 'FIPS', ['Geography','Cases']),
 ).properties(
     title='STD cases worldwide in {year}'
 )
