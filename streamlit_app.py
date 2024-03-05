@@ -105,11 +105,11 @@ chart_base = alt.Chart(source).properties(
     title='STD cases worldwide in {year}'
 )
 # Map values
-num_scale = alt.Scale(domain=[subset_std['Numerator'].min(), subset_std['Numerator'].max()])
-num_color = alt.Color('Numerator:Q', scale=num_scale)
+num_scale = alt.Scale(domain=[subset_std['Cases'].min(), subset_std['Cases'].max()])
+num_color = alt.Color('Cases:Q', scale=num_scale)
 std_map = chart_base.mark_geoshape().encode(
     color=num_color,
-    tooltip=['Numerator:Q', 'Geography:N']
+    tooltip=['Cases:Q', 'Geography:N']
 )
 
 map_left = background + std_map
