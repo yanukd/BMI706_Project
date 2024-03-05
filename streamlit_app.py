@@ -20,6 +20,8 @@ def load_data():
 
     std_df['Year'] = std_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
     sdh_df['Year'] = sdh_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
+    sdh_df['Year'] = pd.to_numeric(sdh_df['Year'], errors='coerce')
+    std_df['Year'] = pd.to_numeric(std_df['Year'], errors='coerce')
 
     combined_df = pd.concat([std_df, sdh_df], ignore_index=True)
 
@@ -74,7 +76,6 @@ subset_sdh = subset[subset["Indicator"].isin(sdh)]
 # std map
 source = alt.topo_feature(data.us_10m.url, 'states')
 std_data = subset_std.groupby(['Geography', 'Year', 'FIPS'])['Cases'].sum().reset_index()
-std_data= subset_std.dropna(subset=['Cases'])
 
 width = 600
 height = 300
