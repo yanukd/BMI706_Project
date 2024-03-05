@@ -38,7 +38,7 @@ subset = df[df["Year"] == year]
 
 # st.multiselect countries
 country_options = df['Geography'].unique()
-countries = st.multiselect('Countries', options=country_options, default=country_options)
+countries = st.multiselect('Countries', options=country_options)
 # Create a radio button to choose between all countries or only selected
 display_option = st.radio(
     "Display all countries or only selected countries?",
