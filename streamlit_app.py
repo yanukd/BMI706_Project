@@ -20,7 +20,7 @@ def load_data():
     std_df['Year'] = std_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
     sdh_df['Year'] = sdh_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
 
-    combined_df = pd.concate([std_df, sdh_df], ignore_index=True)
+    combined_df = pd.concat([std_df, sdh_df], ignore_index=True)
 
     return combined_df
 
