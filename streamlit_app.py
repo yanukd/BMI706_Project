@@ -125,7 +125,7 @@ map_left = background + std_map
 st.altair_chart(map_left, use_container_width=True)
 
 # sdh map
-sdh_data = subset_std.groupby(['Geography', 'Year', 'FIPS'])['Numerator'].sum().reset_index()
+sdh_data = subset_sdh.groupby(['Geography', 'Year', 'FIPS'])['Numerator'].sum().reset_index()
 
 chart_base_sdh = alt.Chart(source
     ).properties(
