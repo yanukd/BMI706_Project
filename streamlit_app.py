@@ -68,7 +68,7 @@ sdh_options = ['Households living below the federal poverty level',
                'Population 25 years and older w/o HS diploma',
                'Uninsured',
                'Vacant housing']
-sdh = st.multiselect('Social Determinants', options=sdh_options, default = sdh_options)
+sdh = st.multiselect('Social Determinants', options=sdh_options)
 subset_sdh = subset[subset["Indicator"] == sdh]
 
 # std map
