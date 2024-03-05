@@ -39,20 +39,20 @@ min_year, max_year = df['Year'].min(), df['Year'].max()
 year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
 subset = df[df["Year"] == year]
 
-# st.multiselect countries
-country_options = df['Geography'].unique()
-countries = st.multiselect('Countries', options=country_options)
-# Create a radio button to choose between all countries or only selected
-display_option = st.radio(
-    "Display all countries or only selected countries?",
-    ('All', 'Selected')
-)
-if display_option == 'Selected':
-    # Filter the dataframe for selected countries
-    subset = subset[subset["Geography"].isin(countries)]
-else:
-    # Use the full dataframe
-    subset = subset
+# # st.multiselect countries
+# country_options = df['Geography'].unique()
+# countries = st.multiselect('Countries', options=country_options)
+# # Create a radio button to choose between all countries or only selected
+# display_option = st.radio(
+#     "Display all countries or only selected countries?",
+#     ('All', 'Selected')
+# )
+# if display_option == 'Selected':
+#     # Filter the dataframe for selected countries
+#     subset = subset[subset["Geography"].isin(countries)]
+# else:
+#     # Use the full dataframe
+#     subset = subset
 
 #subset = subset[subset["Geography"].isin(countries)]
 
