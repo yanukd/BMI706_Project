@@ -5,7 +5,7 @@ import streamlit as st
 
 ### P1.2 ###
 
-@st.cache
+@st.cache_data
 def load_data():
     # import std data
     std_df = pd.read_csv('https://raw.githubusercontent.com/YoyoMan0414/BMI706_Project/main/STD_by_state.csv')
