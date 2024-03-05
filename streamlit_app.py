@@ -61,15 +61,15 @@ std_options = ['Chlamydia',
                'Gonorrhea',
                'Primary and Secondary Syphilis']
 std = st.multiselect('STD', options=std_options, default = std_options)
-subset_std = subset[subset["Indicator"] == std]
+subset_std = subset[subset["Indicator"].isin(std)]
 
 # multiselect social determinants
 sdh_options = ['Households living below the federal poverty level',
                'Population 25 years and older w/o HS diploma',
                'Uninsured',
                'Vacant housing']
-sdh = st.multiselect('Social Determinants', options=sdh_options)
-subset_sdh = subset[subset["Indicator"] == sdh]
+sdh = st.multiselect('Social Determinants', options=sdh_options, default = sdh_options)
+subset_sdh = subset[subset["Indicator"].isin(sdh)]
 
 # std map
 source = alt.topo_feature(data.world_110m.url, 'countries')
