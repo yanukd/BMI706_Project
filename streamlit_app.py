@@ -51,7 +51,7 @@ if display_option == 'Selected':
 else:
     # Use the full dataframe
     subset = subset
-
+print(subset)
 # st.multiselect std types
 std_options = ['Chlamydia',
                'Congenital Syphilis',
