@@ -17,69 +17,54 @@ def load_data():
     std_df['Rate per 100000'] = pd.to_numeric(std_df['Rate per 100000'], errors='coerce')
     sdh_df['Numerator'] = pd.to_numeric(sdh_df['Numerator'].str.replace(',', ''), errors='coerce')
 
-    # # pivot table
-    # # STD Table
-    # pivoted_std_df = std_df.pivot(index=['FIPS', 'Geography', 'Year'], columns='Indicator',
-    #                               values=['Cases', 'Rate per 100000'])
-    #
-    # # Rename the pivoted columns and reset index in a concise way
-    # pivoted_std_df.columns = [f'{indicator}_{val}'.lower().replace(' ', '_') for val, indicator in
-    #                           pivoted_std_df.columns]
-    # pivoted_std_df = pivoted_std_df.reset_index()
-    #
-    # # Social Determinants of Health Table
-    # pivoted_sdh_df = sdh_df.pivot(index=['FIPS', 'Geography', 'Year'], columns='Indicator',
-    #                               values=['Numerator', 'Percent'])
-    #
-    # # Rename the pivoted columns and reset index in a concise way
-    # pivoted_sdh_df.columns = [f'{indicator}_{val}'.lower().replace(' ', '_') for val, indicator in
-    #                           pivoted_sdh_df.columns]
-    # pivoted_sdh_df = pivoted_sdh_df.reset_index()
-    #
-    # df = pd.merge(pivoted_std_df, pivoted_sdh_df, on=['FIPS', 'Geography', 'Year'], how='left')
-
     std_df['Year'] = std_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
     sdh_df['Year'] = sdh_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
 
-    return std_df, sdh_df
+    combined_df = pd.concate([std_df, sdh_df], ignore_index=True)
+
+    return combined_df
 
 
 # load data
-std_df, sdh_df = load_data()
+df = load_data()
 
 # title
 st.write("## STD Dashboard")
 #
 # replace with st.slider
-min_year, max_year = std_df['Year'].min(), std_df['Year'].max()
+min_year, max_year = df['Year'].min(), df['Year'].max()
 year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
-subset = std_df[std_df["Year"] == year]
+subset = df[df["Year"] == year]
 
-# # replace with st.radio
-# sex_options = ['M', 'F']
-# sex = st.radio('Sex', options=sex_options)
-# subset = subset[subset["Sex"] == sex]
-# ### P2.2 ###
-#
-#
 # st.multiselect countries
-
-country_options = std_df['Geography'].unique()
+country_options = df['Geography'].unique()
 countries = st.multiselect('Countries', options=country_options, default=country_options)
-subset = subset[subset["Geography"].isin(countries)]
+# Create a radio button to choose between all countries or only selected
+display_option = st.radio(
+    "Display all countries or only selected countries?",
+    ('All', 'Selected')
+)
+if display_option == 'Selected':
+    # Filter the dataframe for selected countries
+    subset = subset[subset["Geography"].isin(countries)]
+else:
+    # Use the full dataframe
+    subset = subset
 
 # st.multiselect std types
-# std = ['chlamydia',
-#        'congenital_syphilis',
-#        'early_non-primary,_non-secondary_syphilis',
-#        'gonorrhea',
-#        'primary_and_secondary_syphilis']
-std_options = std_df['Indicator'].unique()
+std_options = ['Chlamydia',
+               'Congenital Syphilis',
+               'Early Non-Primary, Non-Secondary Syphilis',
+               'Gonorrhea',
+               'Primary and Secondary Syphilis']
 std = st.selectbox('STD', options=std_options)
 subset_std = subset[subset["Indicator"] == std]
 
 # multiselect social determinants
-sdh_options = sdh_df['Indicator'].unique()
+sdh_options = ['Households living below the federal poverty level',
+               'Population 25 years and older w/o HS diploma',
+               'Uninsured',
+               'Vacant housing']
 sdh = st.selectbox('Social Determinants', options=sdh_options)
 subset_sdh = subset[subset["Indicator"] == sdh]
 # ### P2.3 ###
