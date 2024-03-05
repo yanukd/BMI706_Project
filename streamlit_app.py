@@ -49,11 +49,11 @@ df = load_data()
 # title
 st.write("## STD Dashboard")
 #
-# ### P2.1 ###
-# # replace with st.slider
-# min_year, max_year = df['Year'].min(), df['Year'].max()
-# year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
-# subset = df[df["Year"] == year]
+# replace with st.slider
+min_year, max_year = df['Year'].min(), df['Year'].max()
+year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
+subset = df[df["Year"] == year]
+
 # ### P2.1 ###
 #
 #
