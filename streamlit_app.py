@@ -94,7 +94,7 @@ background = alt.Chart(source
     height=height
 ).project(project)
 
-selector = alt.selection_multi(
+selector = alt.selection_single(
     # add your code here
     on='click',
     fields=['Geography']
