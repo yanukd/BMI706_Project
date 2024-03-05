@@ -76,7 +76,12 @@ subset = subset[subset["Geography"].isin(countries)]
 #        'primary_and_secondary_syphilis']
 std_options = std_df['Indicator'].unique()
 std = st.selectbox('STD', options=std_options)
-subset = subset[subset["Indicator"] == std]
+subset_std = subset[subset["Indicator"] == std]
+
+# multiselect social determinants
+sdh_options = sdh_df['Indicator'].unique()
+sdh = st.selectbox('Social Determinants', options=sdh_options)
+subset_sdh = subset[subset["Indicator"] == sdh]
 # ### P2.3 ###
 #
 #
