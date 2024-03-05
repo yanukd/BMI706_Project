@@ -73,10 +73,11 @@ subset_sdh = subset[subset["Indicator"].isin(sdh)]
 
 # std map
 source = alt.topo_feature(data.us_10m.url, 'states')
+subset_std = subset_std.dropna(subset=['Cases'])
 
 width = 600
 height = 300
-project = 'equirectangular'
+project = 'albersUsa'
 
 # a gray map using as the visualization background
 # std_data = subset_std.groupby('Geography')['Numerator'].sum().reset_index()
@@ -107,6 +108,7 @@ chart_base = alt.Chart(source).properties(
     title='STD cases in U.S. {year}'
 )
 # Map values
+
 num_scale = alt.Scale(domain=[subset_std['Cases'].min(), subset_std['Cases'].max()])
 num_color = alt.Color('Cases:Q', scale=num_scale)
 std_map = chart_base.mark_geoshape().encode(
