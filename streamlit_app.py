@@ -43,18 +43,18 @@ subset = df[df["Year"] == year]
 country_options = df['Geography'].unique()
 countries = st.multiselect('Countries', options=country_options, default=country_options)
 # Create a radio button to choose between all countries or only selected
-# display_option = st.radio(
-#     "Display all countries or only selected countries?",
-#     ('All', 'Selected')
-# )
-# if display_option == 'Selected':
-#     # Filter the dataframe for selected countries
-#     subset = subset[subset["Geography"].isin(countries)]
-# else:
-#     # Use the full dataframe
-#     subset = subset
+display_option = st.radio(
+    "Display all countries or only selected countries?",
+    ('All', 'Selected')
+)
+if display_option == 'Selected':
+    # Filter the dataframe for selected countries
+    subset = subset[subset["Geography"].isin(countries)]
+else:
+    # Use the full dataframe
+    subset = subset
 
-subset = subset[subset["Geography"].isin(countries)]
+#subset = subset[subset["Geography"].isin(countries)]
 
 # st.multiselect std types
 std_options = ['Chlamydia',
