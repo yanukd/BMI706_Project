@@ -124,6 +124,7 @@ std_map = chart_base.mark_geoshape().encode(
 map_left = background + std_map
 st.altair_chart(map_left, use_container_width=True)
 
+
 # sdh map
 sdh_data = subset_sdh.groupby(['Geography', 'Year', 'FIPS'])['Numerator'].sum().reset_index()
 
