@@ -24,6 +24,7 @@ def load_data():
     std_df['Year'] = pd.to_numeric(std_df['Year'], errors='coerce')
 
     combined_df = pd.concat([std_df, sdh_df], ignore_index=True)
+    combined_df = combined_df.fillna(0)
 
     return combined_df
 
@@ -35,8 +36,8 @@ df = load_data()
 st.write("## STD Dashboard")
 #
 # replace with st.slider
-# min_year, max_year = df['Year'].min(), df['Year'].max()
-min_year, max_year = 2011, df['Year'].max()
+min_year, max_year = df['Year'].min(), df['Year'].max()
+# min_year, max_year = 2011, df['Year'].max()
 year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
 subset = df[df["Year"] == year]
 
