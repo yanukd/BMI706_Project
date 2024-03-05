@@ -70,7 +70,7 @@ sdh = st.multiselect('Social Determinants', options=sdh_options, default = sdh_o
 subset_sdh = subset[subset["Indicator"].isin(sdh)]
 
 # std map
-source = alt.topo_feature(data.world_110m.url, 'countries')
+source = alt.topo_feature(data.us_10m.url, 'countries')
 
 width = 600
 height = 300
