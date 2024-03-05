@@ -60,7 +60,7 @@ std_options = ['Chlamydia',
                'Early Non-Primary, Non-Secondary Syphilis',
                'Gonorrhea',
                'Primary and Secondary Syphilis']
-std = st.selectbox('STD', options=std_options)
+std = st.multiselect('STD', options=std_options, default = std_options)
 subset_std = subset[subset["Indicator"] == std]
 
 # multiselect social determinants
@@ -68,7 +68,7 @@ sdh_options = ['Households living below the federal poverty level',
                'Population 25 years and older w/o HS diploma',
                'Uninsured',
                'Vacant housing']
-sdh = st.selectbox('Social Determinants', options=sdh_options)
+sdh = st.multiselect('Social Determinants', options=sdh_options, default = sdh_options)
 subset_sdh = subset[subset["Indicator"] == sdh]
 
 # std map
