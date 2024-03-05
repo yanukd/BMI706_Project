@@ -39,19 +39,21 @@ subset = df[df["Year"] == year]
 
 # st.multiselect countries
 country_options = df['Geography'].unique()
-countries = st.multiselect('Countries', options=country_options)
+countries = st.multiselect('Countries', options=country_options, default=country_options)
 # Create a radio button to choose between all countries or only selected
-display_option = st.radio(
-    "Display all countries or only selected countries?",
-    ('All', 'Selected')
-)
-if display_option == 'Selected':
-    # Filter the dataframe for selected countries
-    subset = subset[subset["Geography"].isin(countries)]
-else:
-    # Use the full dataframe
-    subset = subset
-print(subset)
+# display_option = st.radio(
+#     "Display all countries or only selected countries?",
+#     ('All', 'Selected')
+# )
+# if display_option == 'Selected':
+#     # Filter the dataframe for selected countries
+#     subset = subset[subset["Geography"].isin(countries)]
+# else:
+#     # Use the full dataframe
+#     subset = subset
+
+subset = subset[subset["Geography"].isin(countries)]
+
 # st.multiselect std types
 std_options = ['Chlamydia',
                'Congenital Syphilis',
@@ -102,10 +104,9 @@ chart_base = alt.Chart(source).properties(
     lookup="id",
     from_=alt.LookupData(subset_std, 'FIPS', ['Geography','Cases']),
 ).properties(
-    title='STD cases worldwide in {year}'
+    title='STD cases in U.S. {year}'
 )
 # Map values
-print(subset_std)
 num_scale = alt.Scale(domain=[subset_std['Cases'].min(), subset_std['Cases'].max()])
 num_color = alt.Color('Cases:Q', scale=num_scale)
 std_map = chart_base.mark_geoshape().encode(
