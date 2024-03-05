@@ -161,9 +161,7 @@ num_color = alt.Color(field="Numerator", type="quantitative", scale=num_scale)
 sdh_map = chart_base_sdh.mark_geoshape().encode(
     color=num_color,
     tooltip=['Numerator:Q', 'Geography:N']
-).transform_filter(
-    selector
-    ).properties(
+).properties(
     title=f'Social Determinants Numerator in U.S. {year}'
 )
 
