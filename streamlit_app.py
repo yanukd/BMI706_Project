@@ -35,12 +35,11 @@ df = load_data()
 st.write("## STD Dashboard")
 #
 # replace with st.slider
-min_year, max_year = df['Year'].min(), df['Year'].max()
+# min_year, max_year = df['Year'].min(), df['Year'].max()
+min_year, max_year = 2011, df['Year'].max()
 year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
 subset = df[df["Year"] == year]
 
-year_sdh = st.slider('Year', min_value = 2011, max_value=int(max_year))
-subset_sdh = df[df["Year"] == year_sdh]
 # # st.multiselect countries
 # country_options = df['Geography'].unique()
 # countries = st.multiselect('Countries', options=country_options)
@@ -73,7 +72,7 @@ sdh_options = ['Households living below the federal poverty level',
                'Uninsured',
                'Vacant housing']
 sdh = st.multiselect('Social Determinants', options=sdh_options, default = sdh_options)
-subset_sdh = subset_sdh[subset_sdh["Indicator"].isin(sdh)]
+subset_sdh = subset[subset["Indicator"].isin(sdh)]
 
 # std map
 source = alt.topo_feature(data.us_10m.url, 'states')
