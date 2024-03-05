@@ -82,7 +82,7 @@ project = 'equirectangular'
 # std_data = subset_std.groupby('Geography')['Numerator'].sum().reset_index()
 
 background = alt.Chart(source
-).mark_geoshape(
+                       ).mark_geoshape(
     fill='#aaa',
     stroke='white'
 ).properties(
@@ -92,32 +92,31 @@ background = alt.Chart(source
 
 selector = alt.selection_single(
     # add your code here
-    on = 'click',
-    fields = ['Country']
-    )
+    on='click',
+    fields=['Country']
+)
 
 chart_base = alt.Chart(source).properties(
     width=width,
     height=height
-    ).project(project
-    ).add_selection(selector
-    ).transform_lookup(
-        lookup="id",
-        from_=alt.LookupData(subset, 'country-code', ['Numerator']),
-    ).properties(
-    title = 'STD cases worldwide in {year}'
+).project(project
+          ).add_selection(selector
+                          ).transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(subset, 'country-code', ['Numerator', 'Geography']),
+).properties(
+    title='STD cases worldwide in {year}'
 )
 # Map values
-num_scale = alt.Scale(domain=[subset_std['Numerator'].min(), subset_std['trials_count'].max()])
-num_color = alt.Color(field='Numerator', type="quantitative", scale=num_scale)
+num_scale = alt.Scale(domain=[subset_std['Numerator'].min(), subset_std['Numerator'].max()])
+num_color = alt.Color('Numerator:Q', scale=num_scale)
 std_map = chart_base.mark_geoshape().encode(
-    color='Numerator:Q',
+    color=num_color,
     tooltip=['Numerator:Q', 'Geography:N']
 )
 
 map_left = background + std_map
 st.altair_chart(map_left, use_container_width=True)
-
 
 # chart = alt.Chart(subset).mark_rect().encode(
 #     x=alt.X("Age:O", sort=ages),
