@@ -39,7 +39,7 @@ min_year, max_year = df['Year'].min(), df['Year'].max()
 year = st.slider('Year', min_value=int(min_year), max_value=int(max_year))
 subset = df[df["Year"] == year]
 
-year_sdh = st.slider('Year', min_value = 2010, max_value=int(max_year))
+year_sdh = st.slider('Year', min_value = 2011, max_value=int(max_year))
 subset_sdh = df[df["Year"] == year_sdh]
 # # st.multiselect countries
 # country_options = df['Geography'].unique()
