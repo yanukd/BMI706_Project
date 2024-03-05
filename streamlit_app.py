@@ -66,7 +66,7 @@ subset = std_df[std_df["Year"] == year]
 
 country_options = std_df['Geography'].unique()
 countries = st.multiselect('Countries', options=country_options, default=country_options)
-subset = subset[subset["Country"].isin(countries)]
+subset = subset[subset["Geography"].isin(countries)]
 
 # st.multiselect std types
 # std = ['chlamydia',
