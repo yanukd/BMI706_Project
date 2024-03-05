@@ -97,7 +97,7 @@ background = alt.Chart(source
 selector = alt.selection_single(
     # add your code here
     on='click',
-    fields=['states']
+    fields=['Geography']
 )
 
 chart_base = alt.Chart(source
@@ -123,8 +123,24 @@ std_map = chart_base.mark_geoshape().encode(
     title=f'STD Cases in U.S. {year}'
 )
 
+# sdh table
+# sdh_table = subset_sdh[subset_sdh]
+# Create the pie chart
+pie_chart = alt.Chart(subset_sdh).mark_arc().encode(
+    theta=alt.Theta(field='Percent', type='quantitative', stack=True),
+    color=alt.Color(field='Indicator', type='nominal'),
+    tooltip=['Indicator', 'Percent']
+).transform_filter(
+    selector  # Filter the data based on the selection
+).properties(
+    width=300,
+    height=300
+)
+
 map_left = background + std_map
-st.altair_chart(map_left, use_container_width=True)
+combined_charts = alt.hconcat(map_left, pie_chart)
+st.altair_chart(combined_charts, use_container_width=True)
+
 
 
 # sdh map
