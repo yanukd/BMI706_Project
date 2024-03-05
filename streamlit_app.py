@@ -1,6 +1,7 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
+from vega_datasets import data
 
 
 ### P1.2 ###
@@ -21,6 +22,8 @@ def load_data():
     sdh_df['Year'] = sdh_df['Year'].str.replace(r"\(COVID-19 Pandemic\)", "", regex=True).str.strip()
 
     combined_df = pd.concat([std_df, sdh_df], ignore_index=True)
+
+    combined_df = combined_df.rename(columns={'Cases': 'Numerator', 'Rate per 100000': 'Rate'})
 
     return combined_df
 
@@ -67,31 +70,55 @@ sdh_options = ['Households living below the federal poverty level',
                'Vacant housing']
 sdh = st.selectbox('Social Determinants', options=sdh_options)
 subset_sdh = subset[subset["Indicator"] == sdh]
-# ### P2.3 ###
-#
-#
-# ### P2.4 ###
-# # replace with st.selectbox
-# cancer_options = df['Cancer'].unique()
-# cancer = st.selectbox('Cancer', options=cancer_options)
-# subset = subset[subset["Cancer"] == cancer]
-# ### P2.4 ###
-#
-#
-# ### P2.5 ###
-# ages = [
-#     "Age <5",
-#     "Age 5-14",
-#     "Age 15-24",
-#     "Age 25-34",
-#     "Age 35-44",
-#     "Age 45-54",
-#     "Age 55-64",
-#     "Age >64",
-# ]
-#
-# scale_domain = [0.01, 1000]
-#
+
+# std map
+source = alt.topo_feature(data.world_110m.url, 'countries')
+
+width = 600
+height = 300
+project = 'equirectangular'
+
+# a gray map using as the visualization background
+# std_data = subset_std.groupby('Geography')['Numerator'].sum().reset_index()
+
+background = alt.Chart(source
+).mark_geoshape(
+    fill='#aaa',
+    stroke='white'
+).properties(
+    width=width,
+    height=height
+).project(project)
+
+selector = alt.selection_single(
+    # add your code here
+    on = 'click',
+    fields = ['Country']
+    )
+
+chart_base = alt.Chart(source).properties(
+    width=width,
+    height=height
+    ).project(project
+    ).add_selection(selector
+    ).transform_lookup(
+        lookup="id",
+        from_=alt.LookupData(subset_std, "country-code", ['Numerator', 'Geography', 'Year','Indicator']),
+    ).properties(
+    title = 'STD cases worldwide in {year}'
+)
+# Map values
+num_scale = alt.Scale(domain=[subset_std['Numerator'].min(), subset_std['trials_count'].max()])
+num_color = alt.Color(field='Numerator', type="quantitative", scale=num_scale)
+std_map = chart_base.mark_geoshape().encode(
+    color='Numerator:Q',
+    tooltip=['Numerator:Q', 'Geography:N']
+)
+
+map_left = background + std_map
+st.altair_chart(map_left, use_container_width=True)
+
+
 # chart = alt.Chart(subset).mark_rect().encode(
 #     x=alt.X("Age:O", sort=ages),
 #     y=alt.Y("Country:N"),
