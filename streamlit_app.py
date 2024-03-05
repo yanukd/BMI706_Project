@@ -23,8 +23,6 @@ def load_data():
 
     combined_df = pd.concat([std_df, sdh_df], ignore_index=True)
 
-    combined_df = combined_df.rename(columns={'Cases': 'Numerator', 'Rate per 100000': 'Rate'})
-
     return combined_df
 
 
