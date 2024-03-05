@@ -103,7 +103,7 @@ chart_base = alt.Chart(source).properties(
     ).add_selection(selector
     ).transform_lookup(
         lookup="id",
-        from_=alt.LookupData(subset_std, "country-code", ['Numerator', 'Geography', 'Year','Indicator']),
+        from_=alt.LookupData(subset, 'country-code', ['Numerator']),
     ).properties(
     title = 'STD cases worldwide in {year}'
 )
