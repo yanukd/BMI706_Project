@@ -79,7 +79,7 @@ std_data = subset_std.groupby(['Geography', 'Year', 'FIPS'])['Cases'].sum().rese
 
 width = 600
 height = 300
-project = 'equirectangular'
+project = 'albersUsa'
 
 # a gray map using as the visualization background
 
